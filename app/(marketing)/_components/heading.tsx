@@ -12,7 +12,7 @@ export const Heading = () => {
         </span>
       </h1>
       <h3 className="text-base sm:text-xl md:text-2xl font-medium">
-        Where thoughts spark, productivity soars, <br />
+        Where goals spark, productivity soars, <br />
         and imagination thrives.
       </h3>
       <Button>
