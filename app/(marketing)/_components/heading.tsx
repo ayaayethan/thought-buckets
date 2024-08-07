@@ -12,8 +12,8 @@ export const Heading = () => {
         </span>
       </h1>
       <h3 className="text-base sm:text-xl md:text-2xl font-medium">
-        A connected workspace where <br />
-        better, faster work happens.
+        Where thoughts spark, productivity soars, <br />
+        and imagination thrives.
       </h3>
       <Button>
         Enter Thought Buckets
