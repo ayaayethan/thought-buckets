@@ -168,6 +168,8 @@ export const restore = mutation({
           await ctx.db.patch(child._id, {
             isArchived: false
           })
+
+          await recursiveRestore(child._id);
         }
     }
 
