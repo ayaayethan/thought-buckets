@@ -181,13 +181,13 @@ export const restore = mutation({
       if (parent?.isArchived) {
         options.parentBucket = undefined;
       }
-
-      const bucket = await ctx.db.patch(args.id, options);
-
-      recursiveRestore(args.id);
-
-      return bucket;
     }
+
+    const bucket = await ctx.db.patch(args.id, options);
+
+    recursiveRestore(args.id);
+
+    return bucket;
   }
 })
 
