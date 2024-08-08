@@ -26,11 +26,11 @@ const DocumentsPage = () => {
         className="hidden dark:block"
       />
       <h2 className="text-lg font-medium">
-        Welcome to {user?.firstName}&apos;s Thought Bucket!
+        Welcome to {user?.firstName}&apos;s Bucket!
       </h2>
       <Button>
         <PlusCircle className="h-4 w-4 mr-2"/>
-        Create a note
+        Create a Bucket
       </Button>
     </div>
   )
