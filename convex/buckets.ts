@@ -108,3 +108,84 @@ export const create = mutation({
     })
   }
 })
+
+export const getTrash = query({
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+
+    const userId = identity.subject;
+
+    const buckets = await ctx.db
+      .query("buckets")
+      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .filter((q) =>
+        q.eq(q.field("isArchived"), true)
+      )
+      .order("desc")
+      .collect();
+
+      return buckets;
+  }
+})
+
+export const restore = mutation({
+  args: { id: v.id("buckets") },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+
+    const userId = identity.subject;
+
+    const existingBucket = await ctx.db.get(args.id);
+
+    if (!existingBucket) {
+      throw new Error("Not found");
+    }
+
+    if (existingBucket.userId !== userId) {
+      throw new Error("Unauthorized");
+    }
+
+    const recursiveRestore = async (bucketId: Id<"buckets">) => {
+      const children = await ctx.db
+        .query("buckets")
+        .withIndex("by_user_parent", (q) => (
+          q
+            .eq("userId", userId)
+            .eq("parentBucket", bucketId)
+        ))
+        .collect();
+
+        for (const child of children) {
+          await ctx.db.patch(child._id, {
+            isArchived: false
+          })
+        }
+    }
+
+    const options: Partial<Doc<"buckets">> = {
+      isArchived: false
+    }
+
+    if (existingBucket.parentBucket) {
+      const parent = await ctx.db.get(existingBucket.parentBucket);
+
+      if (parent?.isArchived) {
+        options.parentBucket = undefined;
+      }
+
+      await ctx.db.patch(args.id, options);
+
+      recursiveRestore(args.id);
+
+      return existingBucket;
+    }
+  }
+})
