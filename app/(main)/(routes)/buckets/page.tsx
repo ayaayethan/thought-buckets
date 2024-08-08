@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api"
 
-const DocumentsPage = () => {
+const BucketsPage = () => {
   const { user } = useUser();
 
   const create = useMutation(api.buckets.create);
@@ -58,4 +58,4 @@ const DocumentsPage = () => {
   )
 }
 
-export default DocumentsPage;
+export default BucketsPage;

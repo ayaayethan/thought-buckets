@@ -3,14 +3,20 @@
 import { cn } from "@/lib/utils";
 import { ChevronsLeft, MenuIcon } from "lucide-react";
 import { UNSTABLE_REVALIDATE_RENAME_ERROR } from "next/dist/lib/constants";
-import { usePathname } from "next/navigation";
+
 import React, { ElementRef, useEffect, useRef, useState } from "react";
+
+import { usePathname } from "next/navigation";
 import { useMediaQuery  } from "usehooks-ts";
 import { UserItem } from "./user-item";
+import { useQuery } from "convex/react";
+
+import { api } from "@/convex/_generated/api";
 
 export const Navigation = () => {
   const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const buckets = useQuery(api.buckets.get)
 
   const isResizingRef = useRef(false);
   const sidebarRef = useRef<ElementRef<"aside">>(null);
@@ -119,7 +125,11 @@ export const Navigation = () => {
 
         </div>
         <div className="mt-4">
-          <p>Documents</p>
+          {buckets?.map((bucket) => (
+            <p key={bucket._id}>
+              {bucket.title}
+            </p>
+          ))}
         </div>
         <div
           onMouseDown={handleMouseDown}

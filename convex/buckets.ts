@@ -3,6 +3,20 @@ import { v, VBoolean } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { Doc, Id } from "./_generated/dataModel";
 
+export const get = query({
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+
+    const buckets = await ctx.db.query("buckets").collect();
+
+    return buckets;
+  }
+})
+
 export const create = mutation({
   args: {
     title: v.string(),
