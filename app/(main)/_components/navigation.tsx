@@ -1,8 +1,9 @@
 "use client";
+import { UNSTABLE_REVALIDATE_RENAME_ERROR } from "next/dist/lib/constants";
 
 import { cn } from "@/lib/utils";
-import { ChevronsLeft, MenuIcon } from "lucide-react";
-import { UNSTABLE_REVALIDATE_RENAME_ERROR } from "next/dist/lib/constants";
+import { ChevronsLeft, MenuIcon, PlusCircle } from "lucide-react";
+import { Item } from "./item";
 
 import React, { ElementRef, useEffect, useRef, useState } from "react";
 
@@ -120,9 +121,12 @@ export const Navigation = () => {
           <ChevronsLeft className="h-6 w-6"/>
         </div>
         <div>
-
           <UserItem />
-
+          <Item
+            onClick={() => {}}
+            label="New page"
+            icon={PlusCircle}
+          />
         </div>
         <div className="mt-4">
           {buckets?.map((bucket) => (
