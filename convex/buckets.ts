@@ -2,6 +2,7 @@ import { v, VBoolean } from "convex/values";
 
 import { mutation, query } from "./_generated/server";
 import { Doc, Id } from "./_generated/dataModel";
+import { exit } from "process";
 
 export const archive = mutation({
   args: {
@@ -72,8 +73,8 @@ export const getSidebar = query({
     .query("buckets")
     .withIndex("by_user_parent", (q) =>
       q
-      .eq("userId", userId)
-      .eq("parentBucket", args.parentBucket)
+        .eq("userId", userId)
+        .eq("parentBucket", args.parentBucket)
     )
     .filter((q) =>
       q.eq(q.field("isArchived"), false)
@@ -181,11 +182,38 @@ export const restore = mutation({
         options.parentBucket = undefined;
       }
 
-      await ctx.db.patch(args.id, options);
+      const bucket = await ctx.db.patch(args.id, options);
 
       recursiveRestore(args.id);
 
-      return existingBucket;
+      return bucket;
     }
+  }
+})
+
+export const remove = mutation({
+  args: { id: v.id("buckets") },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+
+    const userId = identity.subject;
+
+    const existingBucket = await ctx.db.get(args.id);
+
+    if (!existingBucket) {
+      throw new Error("Not found")
+    }
+
+    if (existingBucket.userId !== userId) {
+      throw new Error("Unauthorized");
+    }
+
+    const bucket = await ctx.db.delete(args.id);
+
+    return bucket;
   }
 })
