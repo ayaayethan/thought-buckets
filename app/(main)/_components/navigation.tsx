@@ -2,7 +2,7 @@
 import { UNSTABLE_REVALIDATE_RENAME_ERROR } from "next/dist/lib/constants";
 
 import { cn } from "@/lib/utils";
-import { ChevronsLeft, MenuIcon, PlusCircle } from "lucide-react";
+import { ChevronsLeft, MenuIcon, PlusCircle, Search, Settings } from "lucide-react";
 import { Item } from "./item";
 
 import React, { ElementRef, useEffect, useRef, useState } from "react";
@@ -136,6 +136,17 @@ export const Navigation = () => {
         </div>
         <div>
           <UserItem />
+          <Item
+            label="Search"
+            icon={Search}
+            isSearch
+            onClick={() => {}}
+          />
+          <Item
+            label="Settings"
+            icon={Settings}
+            onClick={() => {}}
+          />
           <Item
             onClick={handleCreate}
             label="New bucket"
