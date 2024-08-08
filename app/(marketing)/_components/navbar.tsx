@@ -36,7 +36,7 @@ export const Navbar = () => {
             </SignInButton>
             <SignInButton mode="modal">
               <Button size="sm">
-                Get Thought Buckets Free
+                Sign Up
               </Button>
             </SignInButton>
           </>
