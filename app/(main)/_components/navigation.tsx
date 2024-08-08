@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { ChevronsLeft, MenuIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { ElementRef, useRef, useState } from "react";
+import React, { ElementRef, useRef, useState } from "react";
 import { useMediaQuery  } from "usehooks-ts";
 
 export const Navigation = () => {
@@ -17,7 +17,39 @@ export const Navigation = () => {
   const [ isResetting, setIsResetting ] = useState(false);
   const [ isCollapsed, setIsCollapsed ] = useState(isMobile);
 
+  const handleMouseDown = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
 
+    isResizingRef.current = true;
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+  }
+
+  const handleMouseMove = (
+    event: MouseEvent
+  ) => {
+    if (!isResizingRef.current) return;
+
+    let newWidth = event.clientX;
+
+    if (newWidth < 240) newWidth = 240;
+    if (newWidth > 480) newWidth = 480;
+
+    if (sidebarRef.current && navbarRef.current) {
+      sidebarRef.current.style.width = `${newWidth}px`;
+      navbarRef.current.style.setProperty("left", `${newWidth}px`);
+      navbarRef.current.style.setProperty("width", `calc(100% - ${newWidth}px)`);
+    }
+  }
+
+  const handleMouseUp = () => {
+    isResizingRef.current = false;
+    document.removeEventListener("mousemove", handleMouseMove);
+    document.removeEventListener("mouseup", handleMouseUp);
+  }
 
   return (
     <>
@@ -45,6 +77,8 @@ export const Navigation = () => {
           <p>Documents</p>
         </div>
         <div
+          onMouseDown={handleMouseDown}
+          onClick={() => {}}
           className="opacity-0 group-hover/sidebar:opacity-100
           transition cursor-ew-resize absolute h-full w-1 bg-primary/10
           right-0 top-0"
