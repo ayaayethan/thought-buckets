@@ -22,9 +22,9 @@ const BucketsPage = () => {
     });
 
     toast.promise(promise, {
-      loading: "Creating a new note...",
-      success: "New note created!",
-      error: "Failed to create a new note."
+      loading: "Creating a new bucket...",
+      success: "New bucket created!",
+      error: "Failed to create a new bucket."
     })
 
 
