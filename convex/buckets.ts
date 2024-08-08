@@ -3,15 +3,31 @@ import { v, VBoolean } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { Doc, Id } from "./_generated/dataModel";
 
-export const get = query({
-  handler: async (ctx) => {
+export const getSidebar = query({
+  args: {
+    parentBucket: v.optional(v.id("buckets"))
+  },
+  handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
 
     if (!identity) {
       throw new Error("Not authenticated");
     }
 
-    const buckets = await ctx.db.query("buckets").collect();
+    const userId = identity.subject;
+
+    const buckets = await ctx.db
+    .query("buckets")
+    .withIndex("by_user_parent", (q) =>
+      q
+      .eq("userId", userId)
+      .eq("parentBucket", args.parentBucket)
+    )
+    .filter((q) =>
+      q.eq(q.field("isArchived"), false)
+    )
+    .order("desc")
+    .collect();
 
     return buckets;
   }

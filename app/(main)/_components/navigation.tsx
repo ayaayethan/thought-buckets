@@ -2,7 +2,14 @@
 import { UNSTABLE_REVALIDATE_RENAME_ERROR } from "next/dist/lib/constants";
 
 import { cn } from "@/lib/utils";
-import { ChevronsLeft, MenuIcon, PlusCircle, Search, Settings } from "lucide-react";
+import {
+  ChevronsLeft,
+  MenuIcon,
+  PlusCircle,
+  Search,
+  Settings
+} from "lucide-react";
+
 import { Item } from "./item";
 
 import React, { ElementRef, useEffect, useRef, useState } from "react";
@@ -10,15 +17,15 @@ import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useMediaQuery  } from "usehooks-ts";
 import { UserItem } from "./user-item";
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
+import { BucketList } from "./bucket-list";
 
 export const Navigation = () => {
   const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width: 768px)");
-  const buckets = useQuery(api.buckets.get);
   const create = useMutation(api.buckets.create);
 
   const isResizingRef = useRef(false);
@@ -154,11 +161,7 @@ export const Navigation = () => {
           />
         </div>
         <div className="mt-4">
-          {buckets?.map((bucket) => (
-            <p key={bucket._id}>
-              {bucket.title}
-            </p>
-          ))}
+          <BucketList />
         </div>
         <div
           onMouseDown={handleMouseDown}
