@@ -64,7 +64,7 @@ export const BucketList = ({
           level === 0 && "hidden"
         )}
       >
-        No buckets inside
+        No buckets
       </p>
       {
         buckets.map(bucket => (

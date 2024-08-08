@@ -1,10 +1,14 @@
 "use client"
 
 import { Skeleton } from "@/components/ui/skeleton";
+import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
-import { ChevronDown, ChevronRight, LucideIcon } from "lucide-react";
+import { useMutation } from "convex/react";
+import { ChevronDown, ChevronRight, LucideIcon, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React from "react";
+import { toast } from "sonner";
 
 interface ItemProps {
   id?: Id<"buckets">;
@@ -31,12 +35,38 @@ export const Item = ({
   onExpand,
   expanded
 }: ItemProps) => {
+  const create = useMutation(api.buckets.create);
+  const router = useRouter();
 
   const handleExpand = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     event.stopPropagation();
     onExpand?.();
+  }
+
+  const onCreate = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
+
+    if (!id) return;
+
+    const promise = create({
+      title: "Untitled", parentBucket: id
+    })
+    .then(bucketId => {
+      if(!expanded) {
+        onExpand?.();
+      }
+      // router.push(`/buckets/${bucketId}`);
+    })
+
+    toast.promise(promise, {
+      loading: "Creating a new bucket...",
+      success: "New bucket created!",
+      error: "Failed to create a new bucket."
+    })
   }
 
   const ChevronIcon = expanded ? ChevronDown : ChevronRight;
@@ -80,6 +110,18 @@ export const Item = ({
         opacity-100">
           <span className="text-xs">Ctrl</span>K
         </kbd>
+      )}
+      {!!id && (
+        <div className="ml-auto flex items-center gap-x-2">
+          <div
+            role="button"
+            onClick={onCreate}
+            className="opacity-0 group-hover:opacity-100 h-full ml-auto
+            rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
+          >
+            <Plus className="h-4 w-4 text-muted-foreground" />
+          </div>
+        </div>
       )}
     </div>
   )
