@@ -5,9 +5,11 @@ import { cn } from "@/lib/utils";
 import {
   ChevronsLeft,
   MenuIcon,
+  Plus,
   PlusCircle,
   Search,
-  Settings
+  Settings,
+  Trash
 } from "lucide-react";
 
 import { Item } from "./item";
@@ -18,6 +20,12 @@ import { usePathname } from "next/navigation";
 import { useMediaQuery  } from "usehooks-ts";
 import { UserItem } from "./user-item";
 import { useMutation } from "convex/react";
+
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
@@ -162,6 +170,22 @@ export const Navigation = () => {
         </div>
         <div className="mt-4">
           <BucketList />
+          <Item
+            onClick={handleCreate}
+            icon={Plus}
+            label="Add a bucket"
+          />
+          <Popover>
+            <PopoverTrigger className="w-full mt-4">
+              <Item label="Trash" icon={Trash}/>
+            </PopoverTrigger>
+            <PopoverContent
+              className="p-0 w-72"
+              side={isMobile ? "bottom" : "right"}
+            >
+              <p> Trash box </p>
+            </PopoverContent>
+          </Popover>
         </div>
         <div
           onMouseDown={handleMouseDown}
