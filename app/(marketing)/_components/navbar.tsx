@@ -1,7 +1,7 @@
 "use client";
 
 import { useScrollTop } from "@/hooks/use-scroll-top";
-import { SignInButton, UserButton } from "@clerk/clerk-react";
+import { SignInButton, SignUpButton, UserButton } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "./logo";
 import { Spinner } from "@/components/spinner";
@@ -34,11 +34,11 @@ export const Navbar = () => {
                 Login
               </Button>
             </SignInButton>
-            <SignInButton mode="modal">
+            <SignUpButton mode="modal">
               <Button size="sm">
                 Sign Up
               </Button>
-            </SignInButton>
+            </SignUpButton>
           </>
         )}
         {isAuthenticated && !isLoading && (
