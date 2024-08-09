@@ -21,5 +21,9 @@ import { api } from "@/convex/_generated/api";
 export const SearchCommand = () => {
   const { user } = useUser();
   const router = useRouter();
-  // const buckets = useQuery();
+  const buckets = useQuery(api.buckets.getSearch);
+
+  const toggle = useSearch(store => store.toggle);
+  const isOpen = useSearch(store => store.isOpen);
+  const onClose = useSearch(store => store.onClose);
 }
