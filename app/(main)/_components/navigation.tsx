@@ -27,6 +27,7 @@ import {
   PopoverContent,
 } from "@/components/ui/popover";
 
+import { useSearch } from "@/hooks/use-search";
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
 import { BucketList } from "./bucket-list";
@@ -36,6 +37,7 @@ export const Navigation = () => {
   const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width: 768px)");
   const create = useMutation(api.buckets.create);
+  const search = useSearch();
 
   const isResizingRef = useRef(false);
   const sidebarRef = useRef<ElementRef<"aside">>(null);
@@ -156,7 +158,7 @@ export const Navigation = () => {
             label="Search"
             icon={Search}
             isSearch
-            onClick={() => {}}
+            onClick={search.onOpen}
           />
           <Item
             label="Settings"
