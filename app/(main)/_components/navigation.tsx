@@ -28,6 +28,8 @@ import {
 } from "@/components/ui/popover";
 
 import { useSearch } from "@/hooks/use-search";
+import { useSettings } from "@/hooks/use-settings";
+
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
 import { BucketList } from "./bucket-list";
@@ -38,6 +40,7 @@ export const Navigation = () => {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const create = useMutation(api.buckets.create);
   const search = useSearch();
+  const settings = useSettings();
 
   const isResizingRef = useRef(false);
   const sidebarRef = useRef<ElementRef<"aside">>(null);
@@ -163,7 +166,7 @@ export const Navigation = () => {
           <Item
             label="Settings"
             icon={Settings}
-            onClick={() => {}}
+            onClick={settings.onOpen}
           />
           <Item
             onClick={handleCreate}
