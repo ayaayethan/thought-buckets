@@ -242,3 +242,32 @@ export const getSearch = query({
     return buckets;
   }
 })
+
+export const getById = query({
+  args: { bucketId: v.id("buckets") },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    const bucket = await ctx.db.get(args.bucketId);
+
+    if (!bucket) {
+      throw new Error("Not found");
+    }
+
+    if (bucket.isPublished && !bucket.isArchived) {
+      return bucket;
+    }
+
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+
+    const userId = identity.subject;
+
+    if (bucket.userId !== userId) {
+      throw new Error("Unauthorized");
+    }
+
+    return bucket;
+  }
+})
