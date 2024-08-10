@@ -302,7 +302,7 @@ export const update = mutation({
       throw new Error("Unauthorized");
     }
 
-    const bucket = await ctx.db.patch(args.id {
+    const bucket = await ctx.db.patch(args.id, {
       ...rest
     })
 
