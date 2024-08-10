@@ -67,6 +67,8 @@ export const Item = ({
       success: "Bucket moved to trash!",
       error: "Failed to archive bucket."
     })
+
+    router.push("/buckets");
   }
 
   const handleExpand = (
