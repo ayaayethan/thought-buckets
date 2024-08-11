@@ -10,6 +10,7 @@ import { Title } from "./title";
 import BuckedIdPage from "../(routes)/buckets/[bucketId]/page";
 import { Banner } from "./banner";
 import { Menu } from "./menu";
+import { Publish } from "./publish";
 
 interface NavbarProps {
   isCollapsed: boolean;
@@ -55,6 +56,7 @@ export const Navbar = ({
         <div className="flex items-center justify-between w-full">
           <Title initialData={bucket}/>
           <div className="flex items-center gap-x-2">
+            <Publish initialData={bucket}/>
             <Menu bucketId={bucket._id} />
           </div>
         </div>
