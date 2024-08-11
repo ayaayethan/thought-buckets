@@ -6,7 +6,9 @@ import { Id } from "@/convex/_generated/dataModel";
 import { Toolbar } from "@/components/toolbar";
 import { Cover } from "@/components/cover";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Editor } from "@/components/editor";
+
+import dynamic from "next/dynamic";
+import { useMemo } from "react";
 
 interface BucketIdPageProps {
   params: {
@@ -20,6 +22,8 @@ const BuckedIdPage = ({
   const bucket = useQuery(api.buckets.getById, {
     bucketId: params.bucketId
   })
+
+  const Editor = useMemo(() => dynamic(() => import("@/components/editor"), { ssr: false }), []);
 
   const update = useMutation(api.buckets.update);
 
