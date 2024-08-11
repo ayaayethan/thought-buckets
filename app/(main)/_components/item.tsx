@@ -92,7 +92,7 @@ export const Item = ({
       if(!expanded) {
         onExpand?.();
       }
-      // router.push(`/buckets/${bucketId}`);
+      router.push(`/buckets/${bucketId}`);
     })
 
     toast.promise(promise, {

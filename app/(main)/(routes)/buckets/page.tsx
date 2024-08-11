@@ -4,21 +4,26 @@ import Image from "next/image";
 
 import { useUser } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, Router } from "lucide-react";
 
 import { toast } from "sonner";
 
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api"
+import { useRouter } from "next/navigation";
 
 const BucketsPage = () => {
   const { user } = useUser();
+  const router = useRouter();
 
   const create = useMutation(api.buckets.create);
 
   const onCreate = () => {
     const promise = create({
       title: "Untitled"
+    })
+    .then(bucketId => {
+      router.push(`buckets/${bucketId}`);
     });
 
     toast.promise(promise, {

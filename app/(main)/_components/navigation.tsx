@@ -16,7 +16,7 @@ import { Item } from "./item";
 
 import React, { ElementRef, useEffect, useRef, useState } from "react";
 
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useMediaQuery  } from "usehooks-ts";
 import { UserItem } from "./user-item";
 import { useMutation } from "convex/react";
@@ -37,6 +37,7 @@ import { TrashBox } from "./trash-box";
 import { Navbar } from "./navbar";
 
 export const Navigation = () => {
+  const router = useRouter();
   const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width: 768px)");
   const create = useMutation(api.buckets.create);
@@ -126,9 +127,10 @@ export const Navigation = () => {
   }
 
   const handleCreate = () => {
-    const promise = create({
-      title: "Untitled"
-    });
+    const promise = create({ title: "Untitled"})
+      .then(bucketId => {
+        router.push(`/buckets/${bucketId}`)
+      });
 
     toast.promise(promise, {
       loading: "Creating a new bucket...",
