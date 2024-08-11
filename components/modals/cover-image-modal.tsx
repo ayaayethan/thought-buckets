@@ -41,9 +41,9 @@ export const CoverImageModal = () => {
       });
 
       await update({
-        id: params.documentId as Id<"buckets">,
+        id: params.bucketId as Id<"buckets">,
         coverImage: res.url
-      })
+      });
 
       onClose();
     }
@@ -57,9 +57,12 @@ export const CoverImageModal = () => {
             Cover Image
           </h2>
         </DialogHeader>
-        <div>
-          TODO: Upload Image
-        </div>
+        <SingleImageDropzone
+          className="w-full outline-none"
+          disabled={isSubmitting}
+          value={file}
+          onChange={onChange}
+        />
       </DialogContent>
     </Dialog>
   )
