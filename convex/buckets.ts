@@ -338,3 +338,32 @@ export const removeIcon = mutation({
     return bucket;
   }
 })
+
+export const removeCoverImage = mutation({
+  args: { id: v.id("buckets") },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("Unauthenticated");
+    }
+
+    const userId = identity.subject;
+
+    const existingBucket = await ctx.db.get(args.id);
+
+    if (!existingBucket) {
+      throw new Error("Not found");
+    }
+
+    if (existingBucket.userId !== userId) {
+      throw new Error("Unauthorized");
+    }
+
+    const bucket = await ctx.db.patch(args.id, {
+      coverImage: undefined
+    })
+
+    return bucket;
+  }
+})
